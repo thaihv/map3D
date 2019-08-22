@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" cache="true" cacheHint="SPEED" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uitgis.prototype.globe.splash.SplashController">
+   <children>
+      <ImageView fx:id="uitgis" cache="true" cacheHint="SPEED" fitHeight="200.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="brand" cache="true" cacheHint="SPEED" fitHeight="200.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+   <effect>
+      <DropShadow />
+   </effect>
+</VBox>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uitgis.prototype.globe.layer.LayerController">
+	<TreeView fx:id="treeView" editable="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+		<contextMenu>
+			<ContextMenu>
+				<items>
+					<MenuItem mnemonicParsing="false" onAction="#addLayer" text="Add" />
+					<MenuItem mnemonicParsing="false" onAction="#removeLayer" text="Remove" />
+					<MenuItem mnemonicParsing="false" onAction="#clearAllLayers" text="Clear" />
+					<MenuItem mnemonicParsing="false" onAction="#enableLayer" text="Enable" />
+					<MenuItem mnemonicParsing="false" onAction="#disableLayer" text="Disable" />
+				</items>
+			</ContextMenu>
+		</contextMenu>
+	</TreeView>
+</AnchorPane>
