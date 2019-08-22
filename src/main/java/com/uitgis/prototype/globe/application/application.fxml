@@ -42,8 +42,8 @@
               <items>
                   <Button mnemonicParsing="false" text="Information" />
                   <Button mnemonicParsing="false" onAction="#fullExtent" text="Full Extent" />
-                  <Button mnemonicParsing="false" text="ZoonIn" />
-                  <Button mnemonicParsing="false" text="ZoomOut" />
+                  <Button mnemonicParsing="false" onAction="#zoomIn" text="ZoomIn" />
+                  <Button mnemonicParsing="false" onAction="#zoomOut" text="ZoomOut" />
               </items>
             </ToolBar>
         </items>

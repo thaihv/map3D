@@ -17,6 +17,7 @@ import com.uitgis.prototype.globe.world.WorldMode;
 import com.uitgis.prototype.globe.world.WorldModel;
 import com.uitgis.prototype.globe.world.WorldView;
 
+import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.event.PositionEvent;
 import gov.nasa.worldwind.event.PositionListener;
@@ -46,10 +47,10 @@ public class ApplicationController implements Initializable {
 
 	@FXML
 	private ProgressIndicator progressIndicator;
-	
+
 	@FXML
 	TextField tfAltitude, tfLat, tfLon, tfElev;
-	
+
 	@FXML
 	Label lblStatus;
 
@@ -68,13 +69,13 @@ public class ApplicationController implements Initializable {
 	private WorldView worldView = new WorldView();
 
 	private LayerView layerView = new LayerView();
-	
-	private StringProperty     altitude   = new SimpleStringProperty();
-	private StringProperty       latitude = new SimpleStringProperty();
-	private StringProperty      longitude = new SimpleStringProperty();
-	private StringProperty      elevation = new SimpleStringProperty();
+
+	private StringProperty altitude = new SimpleStringProperty();
+	private StringProperty latitude = new SimpleStringProperty();
+	private StringProperty longitude = new SimpleStringProperty();
+	private StringProperty elevation = new SimpleStringProperty();
 	private StringProperty downloadStatus = new SimpleStringProperty();
-	
+
 	public StringProperty altitudeProperty() {
 		return this.altitude;
 	}
@@ -86,7 +87,7 @@ public class ApplicationController implements Initializable {
 	public void setAltitude(final String altitude) {
 		this.altitudeProperty().set(altitude);
 	}
-	
+
 	public StringProperty latitudeProperty() {
 		return this.latitude;
 	}
@@ -98,7 +99,7 @@ public class ApplicationController implements Initializable {
 	public void setLatitude(final String latitude) {
 		this.latitudeProperty().set(latitude);
 	}
-	
+
 	public StringProperty longitudeProperty() {
 		return this.longitude;
 	}
@@ -110,7 +111,7 @@ public class ApplicationController implements Initializable {
 	public void setLongitude(final String longitude) {
 		this.longitudeProperty().set(longitude);
 	}
-	
+
 	public StringProperty elevationProperty() {
 		return this.elevation;
 	}
@@ -122,7 +123,7 @@ public class ApplicationController implements Initializable {
 	public void setElevation(final String elevation) {
 		this.elevationProperty().set(elevation);
 	}
-	
+
 	public StringProperty downloadStatusProperty() {
 		return this.downloadStatus;
 	}
@@ -133,8 +134,8 @@ public class ApplicationController implements Initializable {
 
 	public void setDownloadStatus(final String downloadStatus) {
 		this.downloadStatusProperty().set(downloadStatus);
-	}	
-	
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -153,7 +154,7 @@ public class ApplicationController implements Initializable {
 		this.progressIndicator.setVisible(false);
 		this.worldModel.addModeChangeListener(new ModeChangeListener());
 		this.getCurrentWwd().addPositionListener(new WorldPositionListener());
-		
+
 		tfAltitude.textProperty().bindBidirectional(altitudeProperty());
 		tfLat.textProperty().bindBidirectional(latitudeProperty());
 		tfLon.textProperty().bindBidirectional(longitudeProperty());
@@ -211,12 +212,50 @@ public class ApplicationController implements Initializable {
 			@Override
 			public void run() {
 				WorldWindow ww = getCurrentWwd();
-				Position oriPosition =  Position.fromDegrees(20.268460793018612, 103.52821602365239);
+				Position oriPosition = Position.fromDegrees(20.268460793018612, 103.52821602365239);
 				System.out.println(ww.getView().getCenterPoint());
 				System.out.println(ww.getView().getEyePosition());
 				System.out.println(ww.getView().getGlobe().getExtent());
-				double elv = ww.getView().getGlobe().getElevation(oriPosition.getLatitude(), oriPosition.getLongitude());
+				double elv = ww.getView().getGlobe().getElevation(oriPosition.getLatitude(),
+						oriPosition.getLongitude());
 				ww.getView().goTo(oriPosition, elv);
+			}
+		});
+	}
+
+	public void zoomIn() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				WorldWindow ww = getCurrentWwd();
+				View view = ww.getView();
+				if (view.isAnimating()) {
+					view.stopAnimations();
+				}
+				Position pos = view.getEyePosition();
+				System.out.println(pos);
+				Position tmpPos = Position.fromDegrees(pos.getLatitude().degrees, pos.getLongitude().degrees, pos.getElevation() - 100);
+				System.out.println(tmpPos);
+				view.setEyePosition(tmpPos);
+
+			}
+		});
+	}
+
+	public void zoomOut() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				WorldWindow ww = getCurrentWwd();
+				View view = ww.getView();
+				if (view.isAnimating()) {
+					view.stopAnimations();
+				}
+				Position pos = view.getEyePosition();
+				System.out.println(pos);
+				Position tmpPos = Position.fromRadians(pos.getLatitude().radians, pos.getLongitude().radians, pos.getElevation() + 100);
+				view.setEyePosition(tmpPos);
+
 			}
 		});
 	}
@@ -228,7 +267,8 @@ public class ApplicationController implements Initializable {
 		}
 		;
 	}
-	private class WorldPositionListener implements PositionListener{
+
+	private class WorldPositionListener implements PositionListener {
 
 		@Override
 		public void moved(PositionEvent event) {
@@ -238,12 +278,13 @@ public class ApplicationController implements Initializable {
 					Position clickedPosition = getCurrentWwd().getCurrentPosition();
 					if (null != clickedPosition) {
 						DecimalFormat formatter = new DecimalFormat("#,###");
-						
-						String altVal = String.format("%.0f", getCurrentWwd().getView().getEyePosition().getAltitude() / 1000);  //?? Wrong
+
+						String altVal = String.format("%.0f",
+								getCurrentWwd().getView().getEyePosition().getAltitude() / 1000); // ?? Wrong
 						String latVal = String.format("%.4f", clickedPosition.getLatitude().degrees);
 						String lonVal = String.format("%.4f", clickedPosition.getLongitude().degrees);
 						String eleVal = String.format("%.0f", clickedPosition.getElevation());
-						
+
 						altitude.setValue(formatter.format(Double.parseDouble(altVal)) + " km");
 						latitude.setValue(latVal + "\u00B0");
 						longitude.setValue(lonVal + "\u00B0");
@@ -253,5 +294,5 @@ public class ApplicationController implements Initializable {
 			});
 
 		}
-	}	
+	}
 }
