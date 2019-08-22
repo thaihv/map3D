@@ -4,6 +4,7 @@ package com.uitgis.prototype.globe.application;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 import javax.inject.Inject;
@@ -236,15 +237,17 @@ public class ApplicationController implements Initializable {
 				public void run() {
 					Position clickedPosition = getCurrentWwd().getCurrentPosition();
 					if (null != clickedPosition) {
-						String altVal = String.format("%.4f", clickedPosition.getAltitude());  //?? Wrong
+						DecimalFormat formatter = new DecimalFormat("#,###");
+						
+						String altVal = String.format("%.0f", getCurrentWwd().getView().getEyePosition().getAltitude() / 1000);  //?? Wrong
 						String latVal = String.format("%.4f", clickedPosition.getLatitude().degrees);
 						String lonVal = String.format("%.4f", clickedPosition.getLongitude().degrees);
-						String eleVal = String.format("%.0f meters", clickedPosition.getElevation());
+						String eleVal = String.format("%.0f", clickedPosition.getElevation());
 						
-						altitude.setValue(altVal);
-						latitude.setValue(latVal);
-						longitude.setValue(lonVal);
-						elevation.setValue(eleVal);
+						altitude.setValue(formatter.format(Double.parseDouble(altVal)) + " km");
+						latitude.setValue(latVal + "\u00B0");
+						longitude.setValue(lonVal + "\u00B0");
+						elevation.setValue(formatter.format(Double.parseDouble(eleVal)) + " meters");
 					}
 				}
 			});

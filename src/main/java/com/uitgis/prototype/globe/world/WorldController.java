@@ -32,7 +32,6 @@ import gov.nasa.worldwind.layers.WorldMapLayer;
 import gov.nasa.worldwind.layers.Earth.BMNGOneImage;
 import gov.nasa.worldwind.layers.Earth.LandsatI3WMSLayer;
 import gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer;
-import gov.nasa.worldwind.util.StatusBar;
 import gov.nasa.worldwindx.examples.util.SectorSelector;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
@@ -88,12 +87,8 @@ public class WorldController implements Initializable {
 
 			// set world panel / node layout
 			worldPanel.add(wwd, BorderLayout.CENTER);
-			StatusBar statusBar = new StatusBar();
-			statusBar.setEventSource(wwd);
-			worldPanel.add(statusBar, BorderLayout.PAGE_END);
 			worldNode.setContent(worldPanel);
-
-//			wwd.addMouseListener(new WorldMouseListener());
+			wwd.addMouseListener(new WorldMouseListener());
 		}
 	}
 
