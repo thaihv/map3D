@@ -2,16 +2,18 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uitgis.prototype.globe.application.ApplicationController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.uitgis.prototype.globe.application.ApplicationController">
    <children>
       <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="35.0" prefWidth="1366.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -39,17 +41,17 @@
             <ToolBar prefHeight="47.0" prefWidth="1364.0">
               <items>
                   <Button mnemonicParsing="false" text="Information" />
-                  <Button mnemonicParsing="false" text="Full Extent" onAction="#fullExtent"/>
+                  <Button mnemonicParsing="false" onAction="#fullExtent" text="Full Extent" />
                   <Button mnemonicParsing="false" text="ZoonIn" />
                   <Button mnemonicParsing="false" text="ZoomOut" />
               </items>
             </ToolBar>
         </items>
       </SplitPane>
-      <SplitPane dividerPositions="0.15" layoutY="67.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="678.0" prefWidth="1366.0" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="67.0">
+      <SplitPane dividerPositions="0.15" layoutY="67.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="1366.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="67.0">
         <items>
           <AnchorPane fx:id="layerPane" prefHeight="200.0" prefWidth="200.0" />
-          <AnchorPane fx:id="worldPane">
+          <AnchorPane fx:id="worldPane" prefHeight="649.0" prefWidth="1156.0">
                <children>
                   <ProgressIndicator fx:id="progressIndicator" progress="0.0" scaleShape="false" scaleX="0.25" scaleY="0.25" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <opaqueInsets>
@@ -60,6 +62,19 @@
             </AnchorPane>
         </items>
       </SplitPane>
-      <ProgressBar fx:id="progressBar" layoutY="744.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <SplitPane dividerPositions="0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5" layoutY="708.0" prefHeight="23.0" prefWidth="1366.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <items>
+            <Label prefHeight="23.0" text="Altitude " />
+            <TextField fx:id="tfAltitude" editable="false" prefHeight="23.0" />
+            <Label prefHeight="23.0" text="Latitude" />
+            <TextField fx:id="tfLat" editable="false" prefHeight="23.0" />
+            <Label prefHeight="23.0" text="Longitude" />
+            <TextField fx:id="tfLon" editable="false" prefHeight="23.0" />
+            <Label prefHeight="23.0" text="Elevation" />
+            <TextField fx:id="tfElev" editable="false" prefHeight="23.0" />
+            <Label fx:id="lblStatus" prefHeight="23.0" prefWidth="170.0" />
+            <ProgressBar fx:id="progressBar" prefHeight="23.0" prefWidth="462.0" progress="0.0" />
+        </items>
+      </SplitPane>
    </children>
 </AnchorPane>

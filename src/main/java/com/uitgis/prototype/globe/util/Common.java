@@ -18,8 +18,14 @@ import javafx.stage.FileChooser;
 
 public final class Common {
 	public static File selectShpFileLayer(Node source) {
+		File recordsDir = new File(System.getProperty("user.home"), ".myglobe3D/shp");
+		if (! recordsDir.exists()) {
+		    recordsDir.mkdirs();
+		}
+
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open SHP file");
+		fileChooser.setInitialDirectory(recordsDir);
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Shape file", "*.shp"));
 		File file = fileChooser.showOpenDialog(source.getScene().getWindow());
 

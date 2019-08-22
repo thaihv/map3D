@@ -17,12 +17,19 @@ import com.uitgis.prototype.globe.world.WorldModel;
 import com.uitgis.prototype.globe.world.WorldView;
 
 import gov.nasa.worldwind.WorldWindow;
+import gov.nasa.worldwind.event.PositionEvent;
+import gov.nasa.worldwind.event.PositionListener;
+import gov.nasa.worldwind.geom.Position;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 public class ApplicationController implements Initializable {
@@ -38,6 +45,12 @@ public class ApplicationController implements Initializable {
 
 	@FXML
 	private ProgressIndicator progressIndicator;
+	
+	@FXML
+	TextField tfAltitude, tfLat, tfLon, tfElev;
+	
+	@FXML
+	Label lblStatus;
 
 	@Inject
 	private WorldModel worldModel;
@@ -54,7 +67,73 @@ public class ApplicationController implements Initializable {
 	private WorldView worldView = new WorldView();
 
 	private LayerView layerView = new LayerView();
+	
+	private StringProperty     altitude   = new SimpleStringProperty();
+	private StringProperty       latitude = new SimpleStringProperty();
+	private StringProperty      longitude = new SimpleStringProperty();
+	private StringProperty      elevation = new SimpleStringProperty();
+	private StringProperty downloadStatus = new SimpleStringProperty();
+	
+	public StringProperty altitudeProperty() {
+		return this.altitude;
+	}
 
+	public String getAltitude() {
+		return this.altitudeProperty().get();
+	}
+
+	public void setAltitude(final String altitude) {
+		this.altitudeProperty().set(altitude);
+	}
+	
+	public StringProperty latitudeProperty() {
+		return this.latitude;
+	}
+
+	public String getLatitude() {
+		return this.latitudeProperty().get();
+	}
+
+	public void setLatitude(final String latitude) {
+		this.latitudeProperty().set(latitude);
+	}
+	
+	public StringProperty longitudeProperty() {
+		return this.longitude;
+	}
+
+	public String getLongitude() {
+		return this.longitudeProperty().get();
+	}
+
+	public void setLongitude(final String longitude) {
+		this.longitudeProperty().set(longitude);
+	}
+	
+	public StringProperty elevationProperty() {
+		return this.elevation;
+	}
+
+	public String getElevation() {
+		return this.elevationProperty().get();
+	}
+
+	public void setElevation(final String elevation) {
+		this.elevationProperty().set(elevation);
+	}
+	
+	public StringProperty downloadStatusProperty() {
+		return this.downloadStatus;
+	}
+
+	public String getDownloadStatus() {
+		return this.downloadStatusProperty().get();
+	}
+
+	public void setDownloadStatus(final String downloadStatus) {
+		this.downloadStatusProperty().set(downloadStatus);
+	}	
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -72,6 +151,13 @@ public class ApplicationController implements Initializable {
 
 		this.progressIndicator.setVisible(false);
 		this.worldModel.addModeChangeListener(new ModeChangeListener());
+		this.getCurrentWwd().addPositionListener(new WorldPositionListener());
+		
+		tfAltitude.textProperty().bindBidirectional(altitudeProperty());
+		tfLat.textProperty().bindBidirectional(latitudeProperty());
+		tfLon.textProperty().bindBidirectional(longitudeProperty());
+		tfElev.textProperty().bindBidirectional(elevationProperty());
+		lblStatus.textProperty().bindBidirectional(downloadStatusProperty());
 
 	}
 
@@ -124,10 +210,12 @@ public class ApplicationController implements Initializable {
 			@Override
 			public void run() {
 				WorldWindow ww = getCurrentWwd();
+				Position oriPosition =  Position.fromDegrees(20.268460793018612, 103.52821602365239);
 				System.out.println(ww.getView().getCenterPoint());
 				System.out.println(ww.getView().getEyePosition());
-				System.out.println(ww.getView().getViewport());
-				ww.redraw();
+				System.out.println(ww.getView().getGlobe().getExtent());
+				double elv = ww.getView().getGlobe().getElevation(oriPosition.getLatitude(), oriPosition.getLongitude());
+				ww.getView().goTo(oriPosition, elv);
 			}
 		});
 	}
@@ -139,4 +227,28 @@ public class ApplicationController implements Initializable {
 		}
 		;
 	}
+	private class WorldPositionListener implements PositionListener{
+
+		@Override
+		public void moved(PositionEvent event) {
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					Position clickedPosition = getCurrentWwd().getCurrentPosition();
+					if (null != clickedPosition) {
+						String altVal = String.format("%.4f", clickedPosition.getAltitude());  //?? Wrong
+						String latVal = String.format("%.4f", clickedPosition.getLatitude().degrees);
+						String lonVal = String.format("%.4f", clickedPosition.getLongitude().degrees);
+						String eleVal = String.format("%.0f meters", clickedPosition.getElevation());
+						
+						altitude.setValue(altVal);
+						latitude.setValue(latVal);
+						longitude.setValue(lonVal);
+						elevation.setValue(eleVal);
+					}
+				}
+			});
+
+		}
+	}	
 }

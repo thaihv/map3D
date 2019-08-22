@@ -22,6 +22,7 @@ import gov.nasa.worldwind.WorldWind;
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLJPanel;
+import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.geom.Sector;
 import gov.nasa.worldwind.layers.CompassLayer;
 import gov.nasa.worldwind.layers.Layer;
@@ -92,15 +93,17 @@ public class WorldController implements Initializable {
 			worldPanel.add(statusBar, BorderLayout.PAGE_END);
 			worldNode.setContent(worldPanel);
 
-			wwd.addMouseListener(new WorldMouseListener());
+//			wwd.addMouseListener(new WorldMouseListener());
 		}
 	}
 
 	private class WorldMouseListener extends MouseAdapter {
-
 		@Override
 		public void mouseClicked(MouseEvent e) {
-
+			if (getMode().equals(WorldMode.VIEW)) {
+				SwingUtilities.invokeLater(new selectedPositionHandler());
+			} else if (getMode().equals(WorldMode.EDIT)) {
+			}
 		}
 	}
 
@@ -153,10 +156,18 @@ public class WorldController implements Initializable {
 			setMode(WorldMode.VIEW);
 		}
 	}
-	
-    public WorldWindow getWwd()
-    {
-    	System.out.println("NASA World wind here");
-        return this.wwd;
-    } 
+
+	private class selectedPositionHandler implements Runnable {
+		@Override
+		public void run() {
+			Position clickedPosition = wwd.getCurrentPosition();
+			if (null != clickedPosition) {
+				System.out.println("Clicked");
+			}
+		}
+	}
+
+	public WorldWindow getWwd() {
+		return this.wwd;
+	}
 }
