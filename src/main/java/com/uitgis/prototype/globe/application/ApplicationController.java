@@ -126,6 +126,7 @@ public class ApplicationController implements Initializable {
 				WorldWindow ww = getCurrentWwd();
 				System.out.println(ww.getView().getCenterPoint());
 				System.out.println(ww.getView().getEyePosition());
+				System.out.println(ww.getView().getViewport());
 				ww.redraw();
 			}
 		});
