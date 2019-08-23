@@ -34,10 +34,10 @@ public class LayerController implements Initializable {
 
 	private CheckBoxTreeItem<Layer> root = new CheckBoxTreeItem<Layer>();
 	private LayersChangeListener lcl = new LayersChangeListener();
-	
+
 	@Inject
 	private WorldModel worldModel;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Session session = SessionManager.getInstance().getSession(MapControl3D.APPLICATION_TITLE);
@@ -118,7 +118,8 @@ public class LayerController implements Initializable {
 		worldModel.setMode(WorldMode.LOADING);
 		if (Common.selectShpFileLayer(treeView) == null) {
 			worldModel.setMode(WorldMode.VIEW);
-		};
+		}
+		;
 	}
 
 	public void removeLayer() {
@@ -154,6 +155,10 @@ public class LayerController implements Initializable {
 	public void setDisableLayer(String layerName) {
 		Session session = SessionManager.getInstance().getSession(MapControl3D.APPLICATION_TITLE);
 		session.disableLayer(layerName);
+	}
+
+	public void zoomToLayer() {
+
 	}
 
 	private class LayersChangeListener implements PropertyChangeListener {

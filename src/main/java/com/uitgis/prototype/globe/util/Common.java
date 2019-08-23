@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities;
 import com.uitgis.prototype.globe.MapControl3D;
 import com.uitgis.prototype.globe.RandomShapeAttributes;
 
+import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.formats.shapefile.ShapefileLayerFactory;
 import gov.nasa.worldwind.formats.shapefile.ShapefileRecord;
 import gov.nasa.worldwind.formats.shapefile.ShapefileRenderable;
@@ -36,6 +37,7 @@ public final class Common {
 				@Override
 				public void assignAttributes(ShapefileRecord shapefileRecord,
 						ShapefileRenderable.Record renderableRecord) {
+					renderableRecord.setValue(AVKey.DISPLAY_NAME, shapefileRecord.getRecordNumber());
 					renderableRecord.setAttributes(randomAttrs.nextAttributes().asShapeAttributes());
 				}
 			});

@@ -40,10 +40,11 @@
         <items>
             <ToolBar prefHeight="47.0" prefWidth="1364.0">
               <items>
-                  <Button mnemonicParsing="false" text="Information" />
+                  <Button mnemonicParsing="false" onAction="#selectElement" text="Selection" />
                   <Button mnemonicParsing="false" onAction="#fullExtent" text="Full Extent" />
                   <Button mnemonicParsing="false" onAction="#zoomIn" text="ZoomIn" />
                   <Button mnemonicParsing="false" onAction="#zoomOut" text="ZoomOut" />
+                  <Button mnemonicParsing="false" onAction="#editElement" text="Edit" />
               </items>
             </ToolBar>
         </items>

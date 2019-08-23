@@ -14,6 +14,7 @@
 					<MenuItem mnemonicParsing="false" onAction="#removeLayer" text="Remove" />
 					<MenuItem mnemonicParsing="false" onAction="#clearAllLayers" text="Clear" />
 					<MenuItem mnemonicParsing="false" onAction="#enableLayer" text="Enable" />
+					<MenuItem mnemonicParsing="false" onAction="#zoomToLayer" text="Zoom to Layer" />
 					<MenuItem mnemonicParsing="false" onAction="#disableLayer" text="Disable" />
 				</items>
 			</ContextMenu>
