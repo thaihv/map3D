@@ -11,8 +11,11 @@ import java.util.ResourceBundle;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 
+import com.uitgis.prototype.globe.MapControl3D;
 import com.uitgis.prototype.globe.layer.LayerView;
 import com.uitgis.prototype.globe.util.Common;
+import com.uitgis.prototype.globe.util.Session;
+import com.uitgis.prototype.globe.util.SessionManager;
 import com.uitgis.prototype.globe.world.WorldController;
 import com.uitgis.prototype.globe.world.WorldMode;
 import com.uitgis.prototype.globe.world.WorldModel;
@@ -314,8 +317,7 @@ public class ApplicationController implements Initializable {
 		worldModel.setMode(WorldMode.LOADING);
 		if (Common.selectShpFileLayer(layerPane) == null) {
 			worldModel.setMode(WorldMode.VIEW);
-		}
-		;
+		};
 	}
 
 	private class WorldPositionListener implements PositionListener {
@@ -357,7 +359,14 @@ public class ApplicationController implements Initializable {
 	protected Layer makeCustomElements() {
 		AirspaceAttributes attrs = randomAttrs.nextAttributes().asAirspaceAttributes();
 		RenderableLayer layer = new RenderableLayer();
-		layer.setName("AMSL Airspaces");
+		layer.setName("Editable");
+		
+		Session session = SessionManager.getInstance().getSession(MapControl3D.APPLICATION_TITLE);
+		long suffName =session.getLayers().stream().filter(l -> l.getName().contains(layer.getName())).count();
+		String layerName = suffName == 0 ? layer.getName() : layer.getName() + "_" + String.valueOf(suffName);
+		
+		layer.setName(layerName);
+		session.addLayer(layer);
 
 		// Continent-sized cylinder.
 		CappedCylinder cyl = new CappedCylinder(attrs);
@@ -368,10 +377,6 @@ public class ApplicationController implements Initializable {
 		cyl.setValue(AVKey.DISPLAY_NAME, "3,000km Cylinder");
 		layer.addRenderable(cyl);
 
-		// Radarc
-		// To render a Radarc,
-		// (1) Specify inner radius and outer radius.
-		// (2) Specify start and stop azimuth.
 		PartialCappedCylinder partCyl = new PartialCappedCylinder(attrs);
 		partCyl.setCenter(LatLon.fromDegrees(46.7477, -123.6372));
 		partCyl.setRadii(15000.0, 30000.0);
@@ -459,7 +464,7 @@ public class ApplicationController implements Initializable {
 				maxAlt / 4, leftWidth, rightWidth);
 		leg.setTerrainConforming(false, false);
 		layer.addRenderable(track);
-
+		
 		return layer;
 	}	
 	

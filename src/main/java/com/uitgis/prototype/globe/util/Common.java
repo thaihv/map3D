@@ -51,7 +51,9 @@ public final class Common {
 						@Override
 						public void run() {
 							Session session = SessionManager.getInstance().getSession(MapControl3D.APPLICATION_TITLE);
-							String layerName = session.getLayers().stream().anyMatch(l -> l.getName().equals(layer.getName())) == false ? layer.getName() : layer.getName() + "_1";
+							long suffName =session.getLayers().stream().filter(l -> l.getName().contains(layer.getName())).count();
+							String layerName = suffName == 0 ? layer.getName() : layer.getName() + "_" + String.valueOf(suffName);
+							
 							layer.setName(layerName);
 							session.addLayer(layer);
 							System.out.println("SHP added: " + layer.getName());

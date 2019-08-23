@@ -35,7 +35,6 @@ import gov.nasa.worldwind.layers.WorldMapLayer;
 import gov.nasa.worldwind.layers.Earth.BMNGOneImage;
 import gov.nasa.worldwind.layers.Earth.LandsatI3WMSLayer;
 import gov.nasa.worldwind.layers.Earth.NASAWFSPlaceNameLayer;
-import gov.nasa.worldwind.layers.placename.PlaceNameLayer;
 import gov.nasa.worldwind.render.Highlightable;
 import gov.nasa.worldwind.util.BasicDragger;
 import gov.nasa.worldwindx.applications.worldwindow.util.Util;
@@ -98,16 +97,6 @@ public class WorldController implements Initializable {
 			wwd.addMouseListener(new WorldMouseListener());
 			wwd.addSelectListener(new BasicDragger(wwd));
 		}
-	}
-
-	public static void insertBeforePlacenames(WorldWindow wwd, Layer layer) {
-		int compassPosition = 0;
-		LayerList layers = wwd.getModel().getLayers();
-		for (Layer l : layers) {
-			if (l instanceof PlaceNameLayer)
-				compassPosition = layers.indexOf(l);
-		}
-		layers.add(compassPosition, layer);
 	}
 
 	private class WorldMouseListener extends MouseAdapter {
@@ -185,12 +174,6 @@ public class WorldController implements Initializable {
 
 		public void onMessage(Message msg) {
 			try {
-				// Update the list of highlighted objects whenever the ScreenSelector's
-				// selection changes. We capture
-				// both the selection started and selection changed events to ensure that we
-				// clear the list of selected
-				// objects when the selection begins or re-starts, as well as update the list
-				// when it changes.
 				if (msg.getName().equals(ScreenSelector.SELECTION_STARTED)
 						|| msg.getName().equals(ScreenSelector.SELECTION_CHANGED)) {
 					this.highlightSelectedObjects(this.screenSelector.getSelectedObjects());
@@ -202,12 +185,6 @@ public class WorldController implements Initializable {
 		}
 
 		protected void highlight(Object o) {
-			// Determine if the highlighted object under the cursor has changed, but should
-			// remain highlighted because
-			// its in the selection box. In this case we assign the highlighted object under
-			// the cursor to null and
-			// return, and thereby avoid changing the highlight state of objects still
-			// highlighted by the selection box.
 			if (this.lastHighlightObject != o && this.lastBoxHighlightObjects.contains(this.lastHighlightObject)) {
 				this.lastHighlightObject = null;
 				return;
@@ -219,11 +196,6 @@ public class WorldController implements Initializable {
 		protected void highlightSelectedObjects(List<?> list) {
 			if (this.lastBoxHighlightObjects.equals(list))
 				return; // same thing selected
-
-			// Turn off highlight for the last set of selected objects, if any. Since one of
-			// these objects may still be
-			// highlighted due to a cursor rollover, we detect that object and avoid
-			// changing its highlight state.
 			for (Highlightable h : this.lastBoxHighlightObjects) {
 				if (h != this.lastHighlightObject)
 					h.setHighlighted(false);
@@ -239,16 +211,6 @@ public class WorldController implements Initializable {
 					}
 				}
 			}
-
-			// We've potentially changed the highlight state of one or more objects. Request
-			// that the world window
-			// redraw itself in order to refresh these object's display. This is necessary
-			// because changes in the
-			// objects in the pick rectangle do not necessarily correspond to mouse
-			// movements. For example, the pick
-			// rectangle may be cleared when the user releases the mouse button at the end
-			// of a drag. In this case,
-			// there's no mouse movement to cause an automatic redraw.
 			this.wwd.redraw();
 		}
 	}
