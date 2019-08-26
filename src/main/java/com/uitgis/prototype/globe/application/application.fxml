@@ -34,6 +34,7 @@
         <items>
             <ToolBar prefHeight="47.0" prefWidth="1364.0">
               <items>
+              	  <Button mnemonicParsing="false" onAction="#identifyElement" text="Identification" />
                   <Button mnemonicParsing="false" onAction="#selectElement" text="Selection" />
                   <Button mnemonicParsing="false" onAction="#fullExtent" text="Full Extent" />
                   <Button mnemonicParsing="false" onAction="#zoomIn" text="ZoomIn" />

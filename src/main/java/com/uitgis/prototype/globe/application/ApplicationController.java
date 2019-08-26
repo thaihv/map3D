@@ -20,6 +20,7 @@ import com.uitgis.prototype.globe.world.WorldController;
 import com.uitgis.prototype.globe.world.WorldMode;
 import com.uitgis.prototype.globe.world.WorldModel;
 import com.uitgis.prototype.globe.world.WorldView;
+import com.uitgis.prototype.globe.world.WorldController.SelectionHighlightController;
 
 import gov.nasa.worldwind.View;
 import gov.nasa.worldwind.WorldWindow;
@@ -44,6 +45,7 @@ import gov.nasa.worldwind.render.airspaces.Route;
 import gov.nasa.worldwind.render.airspaces.TrackAirspace;
 import gov.nasa.worldwindx.examples.util.RandomShapeAttributes;
 import gov.nasa.worldwindx.examples.util.ScreenSelector;
+import gov.nasa.worldwindx.examples.util.ToolTipController;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -236,6 +238,14 @@ public class ApplicationController implements Initializable {
 		return wwcontroller.getScreenSelector();
 	};
 
+	private SelectionHighlightController getHighlightController() {
+		WorldController wwcontroller = (WorldController) worldView.getPresenter();
+		return wwcontroller.getHighlightController();
+	}
+	public ToolTipController getToolTipController() {
+		WorldController wwcontroller = (WorldController) worldView.getPresenter();
+		return wwcontroller.getToolTipController();
+	}		
 	public void fullExtent() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -313,6 +323,24 @@ public class ApplicationController implements Initializable {
 		insertBeforePlaceNameLayer(getCurrentWwd(), makeCustomElements());
 	}
 
+	public void identifyElement() {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+
+				if (worldModel.getMode().equals(WorldMode.SELECT)) {
+					worldModel.setMode(WorldMode.VIEW);
+					getScreenSelector().disable();
+					getToolTipController().dispose();
+					getHighlightController().dispose();
+					
+				} else {
+					worldModel.setMode(WorldMode.SELECT);
+					getScreenSelector().enable();
+				}
+			}
+		});
+	}
 	public void openShpFile() {
 		worldModel.setMode(WorldMode.LOADING);
 		if (Common.selectShpFileLayer(layerPane) == null) {

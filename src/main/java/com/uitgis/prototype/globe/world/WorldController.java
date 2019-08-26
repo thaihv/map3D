@@ -94,6 +94,7 @@ public class WorldController implements Initializable {
 			toolTipController = new ToolTipController(wwd, AVKey.DISPLAY_NAME, null);
 			selectionHighlightController = new SelectionHighlightController(wwd, screenSelector);
 
+
 			wwd.addMouseListener(new WorldMouseListener());
 			wwd.addSelectListener(new BasicDragger(wwd));
 		}
@@ -116,8 +117,8 @@ public class WorldController implements Initializable {
 				LayerList layers = wwd.getModel().getLayers();
 				for (Layer l : layers) {
 
-					if (l.isEnabled() == false)
-						layers.remove(l);
+//					if (l.isEnabled() == false)
+//						layers.remove(l);
 					if (l instanceof NASAWFSPlaceNameLayer || l instanceof ScalebarLayer || l instanceof CompassLayer
 							|| l instanceof WorldMapLayer || l instanceof LandsatI3WMSLayer
 							|| l instanceof BMNGOneImage)
@@ -226,4 +227,13 @@ public class WorldController implements Initializable {
 	public SelectionHighlightController getHighlightController() {
 		return this.selectionHighlightController;
 	}
+	public ToolTipController getToolTipController() {
+		return this.toolTipController;
+	}
+	public void setHighlightController(SelectionHighlightController hlight) {
+		selectionHighlightController = hlight;
+	}
+	public void setToolTipController(ToolTipController tooltip) {
+		toolTipController = tooltip;
+	}	
 }
