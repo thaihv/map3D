@@ -41,6 +41,8 @@ public class MapControl3D extends Application {
 	public void stop() throws Exception {
 		super.stop();
 		Injector.forgetAll();
+//		Platform.exit();
+//		System.exit(0);
 	}
 
 
